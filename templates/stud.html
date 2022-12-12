@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <title>Makeup System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', path='css/materialize.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="container">
+        <div class="nav-wrapper valign-wrapper">
+            <img class="logo" src="{{ url_for('static', path='img/bits-logo.gif') }}" />
+            <img class="navbar-right tagline" src="{{ url_for('static', path='img/bits-tagline.png') }}" />
+        </div>
+    </nav>
+
+    <div>
+        <img class="bits-line" src="{{ url_for('static', path='img/bits-line.gif') }}" />
+    </div>
+
+    <div id="btn-all" class="container">
+        <h3 class="center"><strong>Makeup System</strong></h3>
+
+        <div id ="header"> 
+            <h5 class="center"><strong>Student : {{user.username}}</strong></h5> 
+            
+            <form action="/signout" method="get">
+                <div class="buttons"> 
+                <button type="submit" name="logout" class="btn-all">Logout</button>            
+                </div>
+            </form>
+        </div>
+
+        <div class="student_req_list" >
+            <h5 class="center">My Requests</h5>
+            
+            <ul class="stud_reqs" style="list-style: none;margin:50px">
+                {% for request in student_requests %}
+                <li class="center" style="background-color: #ddd;margin-bottom:20px;border-radius:5px;">
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>{{request.makeup.title}}</b></h6>
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>{{request.makeup.eval_date}}</b></h6>
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>Block Index Submitted : {{request.block_index}}</b></h6>
+                    <br>
+
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>
+                        {% if request.verified %} Verified {% endif %} 
+                    </b></h6>
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>{{request.verification_comment}}</b></h6>
+                    <br>
+
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>
+                        {% if request.approved %} Approved {% endif %} 
+                    </b></h6>
+                    <h6 style="margin-inline:25px;display:inline-block;"><b>{{request.approval_comment}}</b></h6>
+                    <br>
+                </li>
+                {% endfor %}
+
+        </div>
+
+        <br><hr><br>
+        
+        <div class="student_makeup_list" >
+            <h5 class="center">Open Makeups</h5>   
+            <ul style="list-style: none;margin:50px">
+                {% for makeup in open_makeups %}
+                <li>
+                    <details class="center" style="background-color: #ddd;margin-bottom:20px;border-radius: 5px;padding:5px">
+                        <summary>
+                            <div>
+                            <h6 style="margin-right:25px;display:inline-block;">{{makeup.title}}</h6>
+                            <h6 style="margin-right:25px;display:inline-block;">{{makeup.eval_date}}</h6>
+                            <h6 style="margin-inline:25px;display:inline-block;">
+                                {% if makeup.isOpen %}
+                                    <b>Open</b>
+                                {% else %}
+                                    <b>Closed</b>
+                                {% endif %}
+                            </h6>
+                            </div>
+                        </summary>
+
+                        <form action="/request/{{makeup.id}}" method="post">            
+                            <label for="block_index">Block Index:</label>
+                            <input type="number" name="block_index">
+                            <br>
+
+                            <input type="submit" value="Submit" style="background-color: #13aa52;
+                            border: 1px solid #13aa52;
+                            border-radius: 4px;
+                            box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+                            box-sizing: border-box;
+                            color: #fff;
+                            cursor: pointer;
+                            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                            font-size: 16px;
+                            font-weight: 400;
+                            outline: none;
+                            outline: 0;
+                            padding: 5px 10px;
+                            text-align: center;
+                            transform: translateY(0);
+                            transition: transform 150ms, box-shadow 150ms;
+                            user-select: none;
+                            -webkit-user-select: none;
+                            touch-action: manipulation;">
+                        </form>                
+                    </details>
+                </li>
+                {% endfor %}
+            </list>
+        </div>
+
+    </div>        
+</body>
+</html>
